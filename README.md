@@ -1,22 +1,22 @@
 # ClawHub Publish Helper for OpenClaw
 
-One-command publish helper for ClawHub skills.
+一键发布技能到 ClawHub，自动处理限率和错误。
 
-[中文版本](README_CN.md)
-
----
-
-## ✨ Features
-
-- ✅ **Validate Skill Structure** - Check SKILL.md, scripts/, config/
-- ✅ **Required Files Check** - Auto-detect missing files
-- ✅ **Auto Retry** - Exponential backoff on rate limits
-- ✅ **Rate Limit Handling** - Auto-wait 5min × attempt count
-- ✅ **Publish Logging** - Log to publish-log.md
+[English Version](README.md)
 
 ---
 
-## 🚀 Installation
+## ✨ 功能特性
+
+- ✅ **验证技能结构** - 检查 SKILL.md, scripts/, config/
+- ✅ **必需文件检查** - 自动检测缺失文件
+- ✅ **自动重试** - 指数退避处理限率
+- ✅ **限率处理** - 自动等待 5 分钟 × 重试次数
+- ✅ **发布日志** - 记录到 publish-log.md
+
+---
+
+## 🚀 安装
 
 ```bash
 cd /root/.openclaw/workspace/skills
@@ -26,91 +26,91 @@ chmod +x clawhub-publish/publish.sh
 
 ---
 
-## 📖 Usage
+## 📖 使用
 
-### Publish Skill
+### 发布技能
 
 ```bash
-# Publish skill
+# 发布技能
 cd clawhub-publish
 ./publish.sh model-switch
 
-# Dry run (simulate)
+# 模拟运行
 ./publish.sh auto-backup --dry-run
 
-# View help
+# 查看帮助
 ./publish.sh --help
 ```
 
-### Example Output
+### 示例输出
 
 ```
 ============================================================
               🦞 ClawHub Publish Helper                     
 ============================================================
 
-[INFO] Validating skill: model-switch
-[SUCCESS] ✓ SKILL.md exists
-[SUCCESS] ✓ scripts/ directory exists
-[SUCCESS] ✓ config/ directory exists
-[SUCCESS] Skill validation passed
+[INFO] 验证技能：model-switch
+[SUCCESS] ✓ SKILL.md 存在
+[SUCCESS] ✓ scripts/ 目录存在
+[SUCCESS] ✓ config/ 目录存在
+[SUCCESS] 技能验证通过
 
-[INFO] Publish attempt #1/5
-[SUCCESS] Published: model-switch
+[INFO] 发布尝试 #1/5
+[SUCCESS] 发布成功：model-switch
 
 ============================================================
-  ✅ Publish Success!
+  ✅ 发布成功！
 ============================================================
 ```
 
 ---
 
-## ⚙️ Configuration
+## ⚙️ 配置
 
-Edit parameters at script top:
+编辑脚本顶部参数：
 
 ```bash
-MAX_ATTEMPTS=5       # Max retry attempts
-BASE_WAIT=300        # Base wait time (seconds)
+MAX_ATTEMPTS=5       # 最大重试次数
+BASE_WAIT=300        # 基础等待时间（秒）
 ```
 
 ---
 
-## 📋 Logs
+## 📋 日志
 
-Publish logs saved at:
+发布日志保存在：
 `/root/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
 
 ---
 
-## 🛠️ Troubleshooting
+## 🛠️ 故障排查
 
-### Validation Failed
+### 验证失败
 
-Ensure skill directory contains:
-- `SKILL.md` (required)
-- `scripts/` directory (recommended)
-- `README.md` (recommended)
+确保技能目录包含：
+- `SKILL.md`（必需）
+- `scripts/` 目录（推荐）
+- `README.md`（推荐）
 
-### Publish Failed
+### 发布失败
 
-1. Check network connection
-2. Verify ClawHub login: `npx clawhub whoami`
-3. Check logs: `cat publish-log.md`
+1. 检查网络连接
+2. 确认 ClawHub 登录：`npx clawhub whoami`
+3. 查看日志：`cat publish-log.md`
 
-### Rate Limited
+### 持续限率
 
-Script auto-waits and retries. If persistent:
-- Wait 10-15 minutes
-- Or publish manually: `npx clawhub publish <skill>`
+脚本会自动重试。如持续限率：
+- 等待 10-15 分钟
+- 或手动发布：`npx clawhub publish <skill>`
 
 ---
 
-## 📄 License
+## 📄 许可证
 
 MIT-0
 
 ---
 
-**Author:** @williamwg2025  
-**Version:** 1.0.0
+**作者：** @williamwg2025  
+**版本：** 1.0.0
