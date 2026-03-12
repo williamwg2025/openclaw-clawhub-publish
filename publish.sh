@@ -69,7 +69,8 @@ validate_skill() {
     # Run comprehensive pre-publish check
     log_info "运行 ClawHub 发布前检查..."
     if [ -f "$SCRIPT_DIR/scripts/pre-publish-check.py" ]; then
-        if ! python3 "$SCRIPT_DIR/scripts/pre-publish-check.py" "$skill_dir"; then
+        # 使用绝对路径运行检查，但只检查目标技能目录
+        if ! python3 "$SCRIPT_DIR/scripts/pre-publish-check.py" --skill-only "$skill_dir"; then
             log_error "发布前检查失败，请修复问题后再发布"
             return 1
         fi

@@ -233,14 +233,16 @@ class PreCheck:
         
         return not has_external
     
-    def check_path_security(self) -> bool:
+    def check_path_security(self, skill_only: bool = False) -> bool:
         """检查路径安全性（不使用硬编码的 /root）"""
         log_info("检查路径安全性...")
         
         has_root_path = False
         
-        # 检查所有 Python 脚本和配置文件
-        for pattern in ['**/*.py', '**/*.json', '**/*.md']:
+        # 检查范围：只检查技能目录本身，还是包括子目录
+        patterns = ['*.py', '*.json', '*.md', '*.sh'] if skill_only else ['**/*.py', '**/*.json', '**/*.md', '**/*.sh']
+        
+        for pattern in patterns:
             for file in self.skill_dir.glob(pattern):
                 if file.name.startswith('.'):
                     continue
@@ -248,7 +250,8 @@ class PreCheck:
                 try:
                     content = file.read_text(encoding='utf-8')
                     if '/root/' in content:
-                        log_warning(f"{file.relative_to(self.skill_dir)}: 使用硬编码的 /root 路径")
+                        rel_path = file.relative_to(self.skill_dir)
+                        log_warning(f"{rel_path}: 使用硬编码的 /root 路径")
                         has_root_path = True
                 except:
                     pass
@@ -341,7 +344,7 @@ class PreCheck:
         
         return True
     
-    def run_all_checks(self) -> bool:
+    def run_all_checks(self, skill_only: bool = False) -> bool:
         """运行所有检查"""
         print(f"\n{Colors.BOLD}{Colors.CYAN}{'='*60}{Colors.NC}")
         print(f"{Colors.BOLD}{Colors.CYAN}🔍 ClawHub 发布前检查{Colors.NC}")
@@ -360,7 +363,7 @@ class PreCheck:
         self.check_external_dependencies()
         print()
         
-        self.check_path_security()
+        self.check_path_security(skill_only)
         print()
         
         self.check_config_consistency()
@@ -393,6 +396,7 @@ def main():
     parser = argparse.ArgumentParser(description='ClawHub 发布前检查工具')
     parser.add_argument('skill_dir', nargs='?', help='技能目录')
     parser.add_argument('--strict', action='store_true', help='严格模式（警告也视为错误）')
+    parser.add_argument('--skill-only', action='store_true', help='只检查技能目录本身，不检查父目录')
     
     args = parser.parse_args()
     
@@ -401,12 +405,19 @@ def main():
     
     skill_dir = Path(args.skill_dir).resolve()
     
+    # 如果指定了 --skill-only，确保只检查该目录
+    if args.skill_only:
+        # 验证这是一个有效的技能目录
+        if not (skill_dir / 'SKILL.md').exists():
+            log_error(f"不是有效的技能目录：{skill_dir}")
+            sys.exit(1)
+    
     if not skill_dir.exists():
         log_error(f"目录不存在：{skill_dir}")
         sys.exit(1)
     
     checker = PreCheck(skill_dir)
-    success = checker.run_all_checks()
+    success = checker.run_all_checks(skill_only=args.skill_only)
     
     if args.strict and checker.warnings > 0:
         success = False
