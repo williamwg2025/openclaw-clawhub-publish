@@ -1,17 +1,12 @@
 # ClawHub Publish Log
 
-**Started:** 2026-03-13T02:51:46+08:00
+**Started:** 2026-03-13T02:59:08+08:00
 
 ---
 
 ## Publish Attempts
 
-## Publishing: model-switch
+## Publishing: clawhub-publish
 **Dry run:** 
 
-**VALIDATION PASSED**
-### Attempt 1 - 2026-03-13T02:51:46+08:00
-Error: --version must be valid semver
-**SUCCESS** - Published: model-switch at 2026-03-13T02:51:47+08:00
-
-**PUBLISH FLOW COMPLETED**
+**VALIDATION FAILED**
