@@ -1,11 +1,11 @@
 ---
 name: clawhub-publish
 displayName: ClawHub Publish Helper
-version: 1.1.0
-description: 一键发布技能到 ClawHub，自动处理限率和错误重试。包含发布前自动检查工具，确保技能符合 ClawHub 审查要求。
+version: 1.2.0
+description: 一键发布技能到 ClawHub，自动处理限率和错误重试。包含发布前自动检查工具，基于多次审查经验自动检测安全问题（虚假声明、路径风险、API Key 存储等）。
 license: MIT-0
 acceptLicenseTerms: true
-tags: clawhub, publish, deployment, automation, code-quality
+tags: clawhub, publish, deployment, automation, code-quality, security-audit
 ---
 
 ## 功能特性

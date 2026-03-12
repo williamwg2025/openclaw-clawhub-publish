@@ -265,6 +265,111 @@ class PreCheck:
         
         return True
     
+    def check_security_claims(self) -> bool:
+        """检查安全声明是否准确（基于审查经验）"""
+        log_info("检查安全声明准确性...")
+        
+        skill_md = self.skill_dir / 'SKILL.md'
+        if not skill_md.exists():
+            return False
+        
+        content = skill_md.read_text(encoding='utf-8')
+        
+        # 检查是否有脚本目录
+        scripts_dir = self.skill_dir / 'scripts'
+        has_scripts = scripts_dir.exists() and list(scripts_dir.glob('*.py'))
+        
+        # 检查 1: 说"只读"但实际有写入操作
+        claims_read_only = '只读' in content or '仅需读取' in content
+        has_write_operations = False
+        
+        # 检查脚本是否有写入操作
+        if has_scripts:
+            for py_file in scripts_dir.glob('*.py'):
+                py_content = py_file.read_text(encoding='utf-8')
+                if any(op in py_content for op in ['write', 'save', 'update', 'modify', 'copy', 'shutil.', '.bak']):
+                    has_write_operations = True
+                    break
+        
+        if claims_read_only and has_write_operations:
+            log_warning("SKILL.md 声称'只读'但脚本包含写入操作")
+            log_warning("  建议：准确说明会写入的文件和目录")
+            self.warnings += 1
+        elif not claims_read_only and has_write_operations:
+            log_success("安全声明准确（说明会写入）")
+            self.passed += 1
+        elif claims_read_only and not has_write_operations:
+            log_success("安全声明准确（只读技能）")
+            self.passed += 1
+        
+        # 检查 2: 说"不联网"但脚本有网络请求
+        claims_no_network = '不联网' in content or '不连接网络' in content
+        has_network_calls = False
+        
+        if has_scripts:
+            for py_file in scripts_dir.glob('*.py'):
+                py_content = py_file.read_text(encoding='utf-8')
+                if any(net in py_content.lower() for net in ['requests.', 'urllib', 'http://', 'https://', 'socket']):
+                    has_network_calls = True
+                    break
+        
+        if claims_no_network and has_network_calls:
+            log_error("SKILL.md 声称'不联网'但脚本包含网络调用")
+            log_error("  必须：删除虚假声明或移除网络代码")
+            self.errors += 1
+        elif not claims_no_network and has_network_calls:
+            log_success("安全声明准确（说明需要网络）")
+            self.passed += 1
+        elif claims_no_network and not has_network_calls:
+            log_success("安全声明准确（不联网技能）")
+            self.passed += 1
+        
+        # 检查 3: 是否说明系统操作（重启、执行外部命令等）
+        has_system_calls = False
+        mentions_system_ops = False
+        
+        if has_scripts:
+            for py_file in scripts_dir.glob('*.py'):
+                py_content = py_file.read_text(encoding='utf-8')
+                if any(sys_call in py_content for sys_call in ['subprocess', 'os.system', 'os.popen', 'gateway restart', 'systemctl']):
+                    has_system_calls = True
+                    break
+        
+        if '重启' in content or 'gateway' in content or '系统命令' in content:
+            mentions_system_ops = True
+        
+        if has_system_calls and not mentions_system_ops:
+            log_warning("脚本执行系统命令但 SKILL.md 未说明")
+            log_warning("  建议：说明会执行的系统操作和影响")
+            self.warnings += 1
+        elif has_system_calls and mentions_system_ops:
+            log_success("系统操作说明准确")
+            self.passed += 1
+        
+        # 检查 4: 是否说明 API Key 存储方式
+        has_api_key_handling = False
+        mentions_api_key_storage = False
+        
+        if has_scripts:
+            for py_file in scripts_dir.glob('*.py'):
+                py_content = py_file.read_text(encoding='utf-8')
+                if 'api_key' in py_content.lower() or 'apikey' in py_content.lower() or 'API_KEY' in py_content:
+                    has_api_key_handling = True
+                    break
+        
+        if 'API' in content and ('明文' in content or '加密' in content or '存储' in content):
+            mentions_api_key_storage = True
+        
+        if has_api_key_handling and not mentions_api_key_storage:
+            log_warning("脚本处理 API Key 但 SKILL.md 未说明存储方式")
+            log_warning("  建议：说明 API Key 存储位置和安全建议")
+            self.warnings += 1
+        elif has_api_key_handling and mentions_api_key_storage:
+            log_success("API Key 存储说明准确")
+            self.passed += 1
+        
+        return self.errors == 0
+    
     def check_config_consistency(self) -> bool:
         """检查配置文件与代码一致性"""
         log_info("检查配置与代码一致性...")
@@ -370,6 +475,9 @@ class PreCheck:
         print()
         
         self.check_security_notes()
+        print()
+        
+        self.check_security_claims()  # 新增：基于审查经验的安全声明检查
         print()
         
         # 打印摘要
