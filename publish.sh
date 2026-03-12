@@ -205,7 +205,14 @@ main() {
     
     local skill_name="$1"
     local dry_run="$2"
-    local skill_dir="$WORKSPACE/skills/$skill_name"
+    
+    # 支持相对路径和绝对路径
+    if [ "$skill_name" == "." ] || [ "$skill_name" == "./" ] || [[ "$skill_name" == /* ]]; then
+        local skill_dir="$(cd "$skill_name" 2>/dev/null && pwd)"
+        skill_name="$(basename "$skill_dir")"
+    else
+        local skill_dir="$WORKSPACE/skills/$skill_name"
+    fi
     
     echo ""
     echo -e "${BLUE}============================================================${NC}"
