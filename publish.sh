@@ -66,39 +66,50 @@ validate_skill() {
         return 1
     fi
     
-    # Check for SKILL.md
-    if [ ! -f "$skill_dir/SKILL.md" ]; then
-        log_error "缺少必需文件：SKILL.md"
-        ((errors++))
-    else
-        log_success "✓ SKILL.md 存在"
-    fi
-    
-    # Check for scripts directory (if it's a script-based skill)
-    if [ -d "$skill_dir/scripts" ]; then
-        log_success "✓ scripts/ 目录存在"
-        
-        # Check for at least one Python or shell script
-        if ! ls "$skill_dir/scripts/"*.py "$skill_dir/scripts/"*.sh 1> /dev/null 2>&1; then
-            log_warning "scripts/ 目录中没有 .py 或 .sh 文件"
+    # Run comprehensive pre-publish check
+    log_info "运行 ClawHub 发布前检查..."
+    if [ -f "$SCRIPT_DIR/scripts/pre-publish-check.py" ]; then
+        if ! python3 "$SCRIPT_DIR/scripts/pre-publish-check.py" "$skill_dir"; then
+            log_error "发布前检查失败，请修复问题后再发布"
+            return 1
         fi
-    fi
-    
-    # Check for config directory (optional)
-    if [ -d "$skill_dir/config" ]; then
-        log_success "✓ config/ 目录存在"
-    fi
-    
-    # Check for README.md (recommended)
-    if [ -f "$skill_dir/README.md" ]; then
-        log_success "✓ README.md 存在"
     else
-        log_warning "缺少推荐文件：README.md"
-    fi
-    
-    if [ $errors -gt 0 ]; then
-        log_error "验证失败：发现 $errors 个错误"
-        return 1
+        log_warning "pre-publish-check.py 不存在，使用基础验证"
+        
+        # Check for SKILL.md
+        if [ ! -f "$skill_dir/SKILL.md" ]; then
+            log_error "缺少必需文件：SKILL.md"
+            ((errors++))
+        else
+            log_success "✓ SKILL.md 存在"
+        fi
+        
+        # Check for scripts directory (if it's a script-based skill)
+        if [ -d "$skill_dir/scripts" ]; then
+            log_success "✓ scripts/ 目录存在"
+            
+            # Check for at least one Python or shell script
+            if ! ls "$skill_dir/scripts/"*.py "$skill_dir/scripts/"*.sh 1> /dev/null 2>&1; then
+                log_warning "scripts/ 目录中没有 .py 或 .sh 文件"
+            fi
+        fi
+        
+        # Check for config directory (optional)
+        if [ -d "$skill_dir/config" ]; then
+            log_success "✓ config/ 目录存在"
+        fi
+        
+        # Check for README.md (recommended)
+        if [ -f "$skill_dir/README.md" ]; then
+            log_success "✓ README.md 存在"
+        else
+            log_warning "缺少推荐文件：README.md"
+        fi
+        
+        if [ $errors -gt 0 ]; then
+            log_error "验证失败：发现 $errors 个错误"
+            return 1
+        fi
     fi
     
     log_success "技能结构验证通过"
