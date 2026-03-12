@@ -23,8 +23,8 @@
 ## 🚀 安装
 
 ```bash
-cd /root/.openclaw/workspace/skills
-git clone https://github.com/williamwg2025/openclaw-clawhub-publish.git clawhub-publish
+cd ~/.openclaw/workspace/skills
+# 技能已安装在：~/.openclaw/workspace/skills/clawhub-publish
 chmod +x clawhub-publish/publish.sh
 ```
 
@@ -132,7 +132,7 @@ BASE_WAIT=300        # 基础等待时间（秒）
 ## 📋 日志
 
 发布日志保存在：
-`/root/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
+`~/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
 
 ---
 

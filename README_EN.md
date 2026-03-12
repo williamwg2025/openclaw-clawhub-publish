@@ -19,7 +19,7 @@ One-command publish helper for ClawHub skills.
 ## 🚀 Installation
 
 ```bash
-cd /root/.openclaw/workspace/skills
+cd ~/.openclaw/workspace/skills
 git clone https://github.com/williamwg2025/openclaw-clawhub-publish.git clawhub-publish
 chmod +x clawhub-publish/publish.sh
 ```
@@ -79,7 +79,7 @@ BASE_WAIT=300        # Base wait time (seconds)
 ## 📋 Logs
 
 Publish logs saved at:
-`/root/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
+`~/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
 
 ---
 

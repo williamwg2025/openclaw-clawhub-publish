@@ -21,7 +21,7 @@ NC='\033[0m'
 
 # Paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-WORKSPACE="/root/.openclaw/workspace"
+WORKSPACE="~/.openclaw/workspace"
 LOG_FILE="$WORKSPACE/skills/clawhub-publish/publish-log.md"
 
 # Counters
