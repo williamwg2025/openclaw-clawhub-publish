@@ -1,12 +1,13 @@
 ---
 name: openclaw-clawhub-publish
 displayName: ClawHub Publish Helper - ClawHub 发布工具
-version: 1.2.0
+version: 1.3.0
 description: |
   ClawHub 发布工具 - 一键发布 OpenClaw 技能到 ClawHub。
   自动处理限率和错误重试，内置发布前检查工具。
+  新增 SEO 优化器，自动优化技能搜索排名（name/displayName/description/tags）。
   基于 10+ 技能审查经验，自动检测：虚假声明、路径风险、API Key 存储、系统操作声明。
-  关键词：openclaw, clawhub, publish, deployment, automation, security-audit
+  关键词：openclaw, clawhub, publish, deployment, automation, security-audit, seo
 license: MIT-0
 acceptLicenseTerms: true
 tags:
@@ -19,6 +20,7 @@ tags:
   - security-audit
   - pre-publish-check
   - ci-cd
+  - seo-optimizer
 ---
 
 ## 功能特性
