@@ -1,5 +1,51 @@
 # ClawHub Publish Helper for OpenClaw
 
+
+## 🎯 推荐安装场景
+
+✅ **你应该安装这个技能，如果：**
+- [ ] 你是技能开发者
+- [ ] 你需要发布技能到 ClawHub
+- [ ] 你想自动化发布流程
+- [ ] 你需要发布前检查
+
+❌ **不需要安装，如果：**
+- [ ] 你不发布技能
+- [ ] 你手动发布
+
+---
+
+## ⭐ 觉得好用？
+
+如果喜欢这个技能，请：
+1. 在 ClawHub 给个 **⭐⭐⭐⭐⭐ 5 星好评**
+2. 分享给其他 OpenClaw 用户
+3. 提交 Issue 或 PR 改进
+
+**你的评分对我们很重要！** 帮助更多人发现这个技能。
+
+---
+
+## 🔗 相关技能推荐
+
+安装了这个技能的用户也安装了：
+
+| 技能 | 作用 | 推荐度 |
+|------|------|--------|
+| [skill-scaffold](../skill-scaffold) | 技能创建 | ⭐⭐⭐⭐⭐ |
+| [auto-backup](../auto-backup) | 自动备份 | ⭐⭐⭐⭐ |
+| [skill-marketplace](../skill-marketplace) | 技能市场 | ⭐⭐⭐⭐ |
+
+**推荐组合安装：**
+```bash
+npx clawhub install openclaw-skill-scaffold
+npx clawhub install openclaw-auto-backup
+npx clawhub install openclaw-skill-marketplace
+```
+
+---
+
+
 一键发布技能到 ClawHub，自动处理限率和错误。
 
 [English Version](README.md)
