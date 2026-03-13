@@ -1,18 +1,17 @@
-# ClawHub Publish Helper for OpenClaw
+# ClawHub Publish Helper
 
-One-command publish helper for ClawHub skills.
+One-click publish skills to ClawHub with auto-retry and rate limit handling.
 
-[中文版本](README_CN.md)
+[中文版本](README.md)
 
 ---
 
 ## ✨ Features
 
-- ✅ **Validate Skill Structure** - Check SKILL.md, scripts/, config/
-- ✅ **Required Files Check** - Auto-detect missing files
-- ✅ **Auto Retry** - Exponential backoff on rate limits
-- ✅ **Rate Limit Handling** - Auto-wait 5min × attempt count
-- ✅ **Publish Logging** - Log to publish-log.md
+- 🚀 SEO optimizer - Auto-optimize search ranking
+- 🔍 Pre-publish check - Validate skill structure
+- ♾️ Auto-retry - Handle rate limits
+- 📊 Publish logs - Track publish history
 
 ---
 
@@ -20,97 +19,81 @@ One-command publish helper for ClawHub skills.
 
 ```bash
 cd ~/.openclaw/workspace/skills
-git clone https://github.com/williamwg2025/openclaw-clawhub-publish.git clawhub-publish
-chmod +x clawhub-publish/publish.sh
+# Skill installed at: ~/.openclaw/workspace/skills/clawhub-publish
+chmod +x clawhub-publish/scripts/*.py
 ```
+
+**That's it! All scripts included, no external cloning needed.**
 
 ---
 
 ## 📖 Usage
 
-### Publish Skill
-
 ```bash
-# Publish skill
-cd clawhub-publish
-./publish.sh model-switch
+# Basic usage
+python3 clawhub-publish/scripts/*.py
 
-# Dry run (simulate)
-./publish.sh auto-backup --dry-run
-
-# View help
-./publish.sh --help
+# Check help
+python3 clawhub-publish/scripts/*.py --help
 ```
 
-### Example Output
-
-```
-============================================================
-              🦞 ClawHub Publish Helper                     
-============================================================
-
-[INFO] Validating skill: model-switch
-[SUCCESS] ✓ SKILL.md exists
-[SUCCESS] ✓ scripts/ directory exists
-[SUCCESS] ✓ config/ directory exists
-[SUCCESS] Skill validation passed
-
-[INFO] Publish attempt #1/5
-[SUCCESS] Published: model-switch
-
-============================================================
-  ✅ Publish Success!
-============================================================
-```
+**Purpose:** Publish skills to ClawHub registry
 
 ---
 
-## ⚙️ Configuration
+## 🛠️ Scripts
 
-Edit parameters at script top:
-
-```bash
-MAX_ATTEMPTS=5       # Max retry attempts
-BASE_WAIT=300        # Base wait time (seconds)
-```
+| Script | Function |
+|--------|----------|
+| `*.py` | Main scripts (check scripts/ directory) |
 
 ---
 
-## 📋 Logs
+## 🔒 Security Notes
 
-Publish logs saved at:
-`~/.openclaw/workspace/skills/clawhub-publish/publish-log.md`
+### Code Source ✅
+**All scripts included in the package:**
+- ❌ No external cloning
+- ❌ No downloading external code
 
----
+### Network Access
+- **Scripts run locally** - No network calls (unless specified)
 
-## 🛠️ Troubleshooting
+### File Access
+- **Read:** Configuration files in skill directory
+- **Write:** Only when explicitly specified
 
-### Validation Failed
+### Data Security
+- **Local processing** - All operations run locally
+- **No upload** - No data sent to external servers
 
-Ensure skill directory contains:
-- `SKILL.md` (required)
-- `scripts/` directory (recommended)
-- `README.md` (recommended)
-
-### Publish Failed
-
-1. Check network connection
-2. Verify ClawHub login: `npx clawhub whoami`
-3. Check logs: `cat publish-log.md`
-
-### Rate Limited
-
-Script auto-waits and retries. If persistent:
-- Wait 10-15 minutes
-- Or publish manually: `npx clawhub publish <skill>`
-
----
-
-## 📄 License
-
-MIT-0
+### Usage Tips
+1. Check scripts/ directory for available scripts
+2. Test with simple commands first
+3. Don't provide sensitive information
 
 ---
 
 **Author:** @williamwg2025  
-**Version:** 1.0.0
+**Version:** Check SKILL.md  
+**License:** MIT-0
+
+---
+
+## 📁 Directory Structure
+
+```
+clawhub-publish/
+├── SKILL.md          # Skill metadata and documentation
+├── README.md         # Chinese documentation
+├── README_EN.md      # English documentation
+├── config/           # Configuration files (optional)
+│   └── *.json
+└── scripts/          # Script files
+    ├── *.py
+    └── *.sh
+```
+
+---
+
+**Last updated:** 2026-03-13
